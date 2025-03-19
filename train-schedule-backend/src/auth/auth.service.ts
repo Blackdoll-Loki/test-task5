@@ -6,8 +6,8 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class AuthService {
   constructor(
-    private configService: ConfigService, 
-    private jwtService: JwtService
+    private configService: ConfigService,
+    private jwtService: JwtService,
   ) {}
 
   async hashPassword(password: string) {
