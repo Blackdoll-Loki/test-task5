@@ -28,6 +28,7 @@ export class AuthController {
   @Post('login')
   async login(@Body() body: { email: string; password: string }, @Res() res) {
     const user = await this.findUserByUsername(body.email); 
+    console.log('user', user)
     if (!user || !(await this.authService.comparePasswords(body.password, user.password))) {
       return res.status(HttpStatus.UNAUTHORIZED).json({ message: 'Invalid credentials' });
     }
@@ -37,6 +38,7 @@ export class AuthController {
   }
 
   private async findUserByUsername(email: string) {
-    return prisma.user.findUnique({ where: { email } });
+    console.log('login request prisma')
+    return await prisma.user.findUnique({ where: { email } });
   }
 }
