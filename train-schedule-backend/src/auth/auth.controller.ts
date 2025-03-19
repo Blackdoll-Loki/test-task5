@@ -1,6 +1,8 @@
 import { Controller, Post, Body, Res, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient()
 
 
 @Controller('auth')
@@ -9,8 +11,12 @@ export class AuthController {
 
   @Post('register')
   async register(@Body() body: { email: string; password: string }) {
+    console.log('body', body);
+
     const hashedPassword = await this.authService.hashPassword(body.password);
-    PrismaService.user.create({
+
+    console.log('hashedPassword', hashedPassword)
+    await prisma.user.create({
         data: {
             email: body.email, 
             password: hashedPassword,
@@ -31,6 +37,6 @@ export class AuthController {
   }
 
   private async findUserByUsername(email: string) {
-    return PrismaService.user.findUnique({ where: { email } });
+    return prisma.user.findUnique({ where: { email } });
   }
 }
